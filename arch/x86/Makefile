@@ -26,32 +26,32 @@ ifeq ($(CONFIG_X86_32),y)
         CHECKFLAGS += -D__i386__
 
         biarch := $(call cc-option,-m32)
-        KBUILD_AFLAGS += $(biarch)
-        KBUILD_CFLAGS += $(biarch)
+        #KBUILD_AFLAGS += $(biarch)
+        #KBUILD_CFLAGS += $(biarch)
 
-        KBUILD_CFLAGS += -msoft-float -mregparm=3 -freg-struct-return
+        # KBUILD_CFLAGS += -msoft-float -mregparm=3 -freg-struct-return
 
         # Don't autogenerate MMX or SSE instructions
-        KBUILD_CFLAGS += -mno-mmx -mno-sse
+        # KBUILD_CFLAGS += -mno-mmx -mno-sse
 
         # Never want PIC in a 32-bit kernel, prevent breakage with GCC built
         # with nonstandard options
-        KBUILD_CFLAGS += -fno-pic
+        # KBUILD_CFLAGS += -fno-pic
 
         # prevent gcc from keeping the stack 16 byte aligned
-        KBUILD_CFLAGS += $(call cc-option,-mpreferred-stack-boundary=2)
+        # KBUILD_CFLAGS += $(call cc-option,-mpreferred-stack-boundary=2)
 
         # Disable unit-at-a-time mode on pre-gcc-4.0 compilers, it makes gcc use
         # a lot more stack due to the lack of sharing of stacklots:
-        KBUILD_CFLAGS += $(call cc-ifversion, -lt, 0400, \
-				$(call cc-option,-fno-unit-at-a-time))
+        # KBUILD_CFLAGS += $(call cc-ifversion, -lt, 0400, \
+	#			$(call cc-option,-fno-unit-at-a-time))
 
         # CPU-specific tuning. Anything which can be shared with UML should go here.
         include $(srctree)/arch/x86/Makefile_32.cpu
-        KBUILD_CFLAGS += $(cflags-y)
+        # KBUILD_CFLAGS += $(cflags-y)
 
         # temporary until string.h is fixed
-        KBUILD_CFLAGS += -ffreestanding
+        # KBUILD_CFLAGS += -ffreestanding
 else
         BITS := 64
         UTS_MACHINE := x86_64
@@ -107,8 +107,8 @@ ifdef CONFIG_X86_X32
 			$(LD) -m elf32_x86_64 "$$TMPO" -o "$$TMP",y,n)
         ifeq ($(x32_ld_ok),y)
                 CONFIG_X86_X32_ABI := y
-                KBUILD_AFLAGS += -DCONFIG_X86_X32_ABI
-                KBUILD_CFLAGS += -DCONFIG_X86_X32_ABI
+                #KBUILD_AFLAGS += -DCONFIG_X86_X32_ABI
+                #KBUILD_CFLAGS += -DCONFIG_X86_X32_ABI
         else
                 $(warning CONFIG_X86_X32 enabled but no binutils support)
         endif
@@ -135,23 +135,23 @@ asinstr := $(call as-instr,fxsaveq (%rax),-DCONFIG_AS_FXSAVEQ=1)
 avx_instr := $(call as-instr,vxorps %ymm0$(comma)%ymm1$(comma)%ymm2,-DCONFIG_AS_AVX=1)
 avx2_instr :=$(call as-instr,vpbroadcastb %xmm0$(comma)%ymm1,-DCONFIG_AS_AVX2=1)
 
-KBUILD_AFLAGS += $(cfi) $(cfi-sigframe) $(cfi-sections) $(asinstr) $(avx_instr) $(avx2_instr)
-KBUILD_CFLAGS += $(cfi) $(cfi-sigframe) $(cfi-sections) $(asinstr) $(avx_instr) $(avx2_instr)
+# KBUILD_AFLAGS += $(cfi) $(cfi-sigframe) $(cfi-sections) $(asinstr) $(avx_instr) $(avx2_instr)
+# KBUILD_CFLAGS += $(cfi) $(cfi-sigframe) $(cfi-sections) $(asinstr) $(avx_instr) $(avx2_instr)
 
 LDFLAGS := -m elf_$(UTS_MACHINE)
 
 # Speed up the build
-KBUILD_CFLAGS += -pipe
+# KBUILD_CFLAGS += -pipe
 # Workaround for a gcc prelease that unfortunately was shipped in a suse release
-KBUILD_CFLAGS += -Wno-sign-compare
+# KBUILD_CFLAGS += -Wno-sign-compare
 #
-KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+# KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
 # prevent gcc from generating any FP code by mistake
-KBUILD_CFLAGS += $(call cc-option,-mno-sse -mno-mmx -mno-sse2 -mno-3dnow,)
-KBUILD_CFLAGS += $(call cc-option,-mno-avx,)
+#KBUILD_CFLAGS += $(call cc-option,-mno-sse -mno-mmx -mno-sse2 -mno-3dnow,)
+#KBUILD_CFLAGS += $(call cc-option,-mno-avx,)
 
-KBUILD_CFLAGS += $(mflags-y)
-KBUILD_AFLAGS += $(mflags-y)
+# KBUILD_CFLAGS += $(mflags-y)
+# KBUILD_AFLAGS += $(mflags-y)
 
 archscripts: scripts_basic
 	$(Q)$(MAKE) $(build)=arch/x86/tools relocs
@@ -165,8 +165,8 @@ archheaders:
 ###
 # Kernel objects
 
-head-y := arch/x86/kernel/head_$(BITS).o
-head-y += arch/x86/kernel/head$(BITS).o
+# head-y := arch/x86/kernel/head_$(BITS).o
+# head-y += arch/x86/kernel/head$(BITS).o
 head-y += arch/x86/kernel/head.o
 
 libs-y  += arch/x86/lib/
@@ -175,16 +175,16 @@ libs-y  += arch/x86/lib/
 core-y += arch/x86/
 
 # drivers-y are linked after core-y
-drivers-$(CONFIG_MATH_EMULATION) += arch/x86/math-emu/
-drivers-$(CONFIG_PCI)            += arch/x86/pci/
+#drivers-$(CONFIG_MATH_EMULATION) += arch/x86/math-emu/
+#drivers-$(CONFIG_PCI)            += arch/x86/pci/
 
 # must be linked after kernel/
-drivers-$(CONFIG_OPROFILE) += arch/x86/oprofile/
+#drivers-$(CONFIG_OPROFILE) += arch/x86/oprofile/
 
 # suspend and hibernation support
-drivers-$(CONFIG_PM) += arch/x86/power/
+#drivers-$(CONFIG_PM) += arch/x86/power/
 
-drivers-$(CONFIG_FB) += arch/x86/video/
+#drivers-$(CONFIG_FB) += arch/x86/video/
 
 ####
 # boot loader support. Several targets are kept for legacy purposes

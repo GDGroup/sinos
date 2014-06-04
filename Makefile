@@ -744,13 +744,13 @@ vmlinux-alldirs	:= $(sort $(vmlinux-dirs) $(patsubst %/,%,$(filter %/, \
 		     $(core-n) $(core-) $(drivers-n) $(drivers-) \
 		     $(net-n)  $(net-)  $(libs-n)    $(libs-))))
 
-init-y		:= $(patsubst %/, %/built-in.o, $(init-y))
-core-y		:= $(patsubst %/, %/built-in.o, $(core-y))
-drivers-y	:= $(patsubst %/, %/built-in.o, $(drivers-y))
-net-y		:= $(patsubst %/, %/built-in.o, $(net-y))
-libs-y1		:= $(patsubst %/, %/lib.a, $(libs-y))
-libs-y2		:= $(patsubst %/, %/built-in.o, $(libs-y))
-libs-y		:= $(libs-y1) $(libs-y2)
+init-y		:= #$(patsubst %/, %/built-in.o, $(init-y))
+core-y		:= #$(patsubst %/, %/built-in.o, $(core-y))
+drivers-y	:= #$(patsubst %/, %/built-in.o, $(drivers-y))
+net-y		:= #$(patsubst %/, %/built-in.o, $(net-y))
+libs-y1		:= #$(patsubst %/, %/lib.a, $(libs-y))
+libs-y2		:= #$(patsubst %/, %/built-in.o, $(libs-y))
+libs-y		:= #$(libs-y1) $(libs-y2)
 
 # Externally visible symbols (used by link-vmlinux.sh)
 export KBUILD_VMLINUX_INIT := $(head-y) $(init-y)
